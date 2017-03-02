@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Sterbin</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<input type="text" id="sterbin" value="Steven"/>
+	<button type="button" id="doIt">Sterbinify</button>
+	
+	<script>
+		function Replacement(replace, replacer) {
+			this.original = replace;
+			this.new = replacer;
+		}
+	
+		var replacementDict = [
+			new Replacement("ve", "bin"),
+			new Replacement("v", "ph"),
+			new Replacement("ph", "phph"),
+			new Replacement("erbin", "pherbin"),
+			new Replacement("bin", "erbin")
+		]
+	
+		$("#doIt").on("click", function() {
+			var text = $("#sterbin").val();
+			
+			var index = -1;
+			var count = 0;
+			
+			while(index < 0) {
+				if (count >= 1000) {
+					alert("couldn't find replacement in 1000 tries");
+					throw new Exception("I couldn't do it");
+				}
+			
+				var rand = Math.floor(Math.random() * replacementDict.length);
+				index = text.indexOf(replacementDict[rand].original);
+				
+				count++;
+			}
+			
+			text = text.replace(replacementDict[rand].original, "");
+			text = text.slice(0, index) + replacementDict[rand].new + text.slice(index);
+			
+			$("#sterbin").val(text);
+		});
+		
+	</script>
+</body>
+</html>
