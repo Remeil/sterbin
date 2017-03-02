@@ -32,6 +32,16 @@
 			new Replacement("ph", "bph"),
 			new Replacement("sterbin", "sterbinflerben")
 		]
+		
+		function indexes(source, find) {
+			var result = [];
+			for (i = 0; i < source.length; ++i) {
+				if (source.substring(i, i + find.length) == find) {
+					result.push(i);
+				}
+			}
+			return result;
+		}
 	
 		$("#doIt").on("click", function() {
 			var text = $("#sterbin").val();
@@ -56,10 +66,13 @@
 				count++;
 			}
 			
+			var indexArr = indexes(text, replacementDict[rand].original);
+			var randIndex = Math.floor(Math.random() * indexArr.length);
+			
 			history.append(text + "<br/>");
 			
 			text = text.replace(replacementDict[rand].original, "");
-			text = text.slice(0, index) + replacementDict[rand].new + text.slice(index);
+			text = text.slice(0, indexArr[randIndex]) + replacementDict[rand].new + text.slice(indexArr[randIndex]);
 			
 			$("#sterbin").val(text);
 		});
