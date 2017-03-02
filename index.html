@@ -5,8 +5,10 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
 </head>
 <body>
-	<input type="text" id="sterbin" value="Steven"/>
-	<button type="button" id="doIt">Sterbinify</button>
+	<input type="text" id="sterbin" value="Steven" style="min-width: 400px;"/>
+	<button type="button" id="doIt">Sterbinify</button> <br/> <br/>
+	<div id="history">
+	</div>
 	
 	<script>
 		function Replacement(replace, replacer) {
@@ -17,6 +19,7 @@
 		var replacementDict = [
 			new Replacement("v", "ph"),
 			new Replacement("ph", "phph"),
+			new Replacement("ph", "fe"),
 			new Replacement("bin", "erbin"),
 			new Replacement("st", "pht"),
 			new Replacement("e", "eve"),
@@ -26,11 +29,13 @@
 			new Replacement("eb", "erb"),
 			new Replacement("ven", "bin"),
 			new Replacement("ph", "phb"),
-			new Replacement("ph", "bph")
+			new Replacement("ph", "bph"),
+			new Replacement("sterbin", "sterbinflerben")
 		]
 	
 		$("#doIt").on("click", function() {
 			var text = $("#sterbin").val();
+			var history = $("#history");
 			
 			var index = -1;
 			var count = 0;
@@ -38,7 +43,11 @@
 			while(index < 0) {
 				if (count >= 1000) {
 					alert("couldn't find replacement in 1000 tries");
-					throw new Exception("I couldn't do it");
+					throw {
+						name: "I couldn't do it exception",
+						message: "sterbin come back, ooooooooh you can blame it all on me",
+						toString: function() {return this.name + ": " + this.message;}
+					};
 				}
 			
 				var rand = Math.floor(Math.random() * replacementDict.length);
@@ -46,6 +55,8 @@
 				
 				count++;
 			}
+			
+			history.append(text + "<br/>");
 			
 			text = text.replace(replacementDict[rand].original, "");
 			text = text.slice(0, index) + replacementDict[rand].new + text.slice(index);
