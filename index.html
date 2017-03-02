@@ -15,33 +15,38 @@
 			this.original = replace;
 			this.new = replacer;
 		}
+		
+		var REDUCER_WEIGHT = 3;
 	
-		var replacementDict = [
-			new Replacement("v", "ph"),
-			new Replacement("ph", "phph"),
-			new Replacement("ph", "fe"),
-			new Replacement("bin", "erbin"),
-			new Replacement("st", "pht"),
-			new Replacement("e", "eve"),
-			new Replacement("b", "beeb"),
-			new Replacement("b", "bl"),
-			new Replacement("v", "fph"),
-			new Replacement("eb", "erb"),
-			new Replacement("ven", "bin"),
-			new Replacement("ph", "phb"),
-			new Replacement("ph", "bph"),
-			new Replacement("sterbin", "sterbinflerben"),
-			new Replacement("er", "fler"),
-			new Replacement("bin", "flerben"),
-			
-			//Reducers
-			new Replacement("eee", "ee"),
-			new Replacement("bbb", "bb"),
-			new Replacement("phphph", "phph"),
-			new Replacement("eee", "ee"),
-			new Replacement("bbb", "bb"),
-			new Replacement("phphph", "phph")
-		]
+		var replacementDict = [];
+		
+		function addToReplacementDict(replace, replacer, weight) {
+			for (var i = 0; i < weight; i++) {
+				replacementDict.push(new Replacement(replace, replacer));
+			}
+		}
+		
+		addToReplacementDict("v", "ph", 1);
+		addToReplacementDict("ph", "phph", 1);
+		addToReplacementDict("ph", "fe", 1);
+		addToReplacementDict("bin", "erbin", 1);
+		addToReplacementDict("st", "pht", 1);
+		addToReplacementDict("e", "eve", 1);
+		addToReplacementDict("b", "beeb", 1);
+		addToReplacementDict("b", "bl", 1);
+		addToReplacementDict("v", "fph", 1);
+		addToReplacementDict("eb", "erb", 1);
+		addToReplacementDict("ven", "bin", 1);
+		addToReplacementDict("ph", "phb", 1);
+		addToReplacementDict("ph", "bph", 1);
+		addToReplacementDict("sterbin", "sterbenflerben", 25);
+		addToReplacementDict("er", "fler", 1);
+		addToReplacementDict("bin", "flerben", 1);
+		
+		//Reducers
+		addToReplacementDict("eee", "ee", 1 * REDUCER_WEIGHT);
+		addToReplacementDict("bbb", "bb", 1 * REDUCER_WEIGHT);
+		addToReplacementDict("phphph", "phph", 1 * REDUCER_WEIGHT);
 		
 		function indexes(source, find) {
 			var result = [];
@@ -56,13 +61,13 @@
 		$("#doIt").on("click", function() {
 			var text = $("#sterbin").val();
 			var history = $("#history");
+			var myDict = JSON.parse(JSON.stringify(replacementDict));
 			
 			var index = -1;
-			var count = 0;
 			
 			while(index < 0) {
-				if (count >= 1000) {
-					alert("couldn't find replacement in 1000 tries");
+				if (myDict.length[0]) {
+					alert("couldn't find replacement");
 					throw {
 						name: "I couldn't do it exception",
 						message: "sterbin come back, ooooooooh you can blame it all on me",
@@ -70,19 +75,21 @@
 					};
 				}
 			
-				var rand = Math.floor(Math.random() * replacementDict.length);
-				index = text.indexOf(replacementDict[rand].original);
+				var rand = Math.floor(Math.random() * myDict.length);
+				index = text.indexOf(myDict[rand].original);
 				
-				count++;
+				if (index < 0) {
+					myDict.splice(rand, 1);
+				}
 			}
 			
-			var indexArr = indexes(text, replacementDict[rand].original);
+			var indexArr = indexes(text, myDict[rand].original);
 			var randIndex = Math.floor(Math.random() * indexArr.length);
 			
 			history.append(text + "<br/>");
 			
-			text = text.replace(replacementDict[rand].original, "");
-			text = text.slice(0, indexArr[randIndex]) + replacementDict[rand].new + text.slice(indexArr[randIndex]);
+			text = text.replace(myDict[rand].original, "");
+			text = text.slice(0, indexArr[randIndex]) + myDict[rand].new + text.slice(indexArr[randIndex]);
 			
 			$("#sterbin").val(text);
 		});
