@@ -11,6 +11,8 @@
 	</div>
 	
 	<script>
+		//No jQuery magic here
+		
 		function Replacement(replace, replacer) {
 			this.original = replace;
 			this.new = replacer;
@@ -60,22 +62,34 @@
 			}
 			return result;
 		}
-	
+		
+		//We use $("#history") to grab the element with the ID history. We'll be using
+		//this element whenever the button is pressed, so we look it up once and store
+		//it for later.
+	        var history = $("#history");
+		
+		//jQuery magic starts. $("#doIt") grabs the element with the ID doIt. We chain the
+		//.on() function to add a handler, tell the handler to handle the click event, and lastly
+		//we give it a function to run when it detects that our element has been clicked.
+		//See: https://api.jquery.com/on/
 		$("#doIt").on("click", function() {
+			
+			//$("#sterbin") grabs the element with the ID sterbin. We don't need the element itself,
+			//but we do need the current value of that element to transform it, so we chain the 
+			//.val() function to grab the value of that element. Since it's a <input type="text">, we get
+			//whatever is currently entered in that text field. See: https://api.jquery.com/val/
 			var text = $("#sterbin").val();
-			var history = $("#history");
+			
+			//This is just an easy way to clone an array. See: http://stackoverflow.com/a/23481096
 			var myDict = JSON.parse(JSON.stringify(replacementDict));
 			
+			//These two sections are standard JavaScript.
 			var index = -1;
 			
 			while(index < 0) {
 				if (myDict.length === 0) {
 					alert("couldn't find replacement");
-					throw {
-						name: "I couldn't do it exception",
-						message: "sterbin come back, ooooooooh you can blame it all on me",
-						toString: function() {return this.name + ": " + this.message;}
-					};
+					throw "Whoops";
 				}
 			
 				var rand = Math.floor(Math.random() * myDict.length);
@@ -86,14 +100,23 @@
 				}
 			}
 			
+			//Still standard JavaScript here.
 			var indexArr = indexes(text, myDict[rand].original);
 			var randIndex = Math.floor(Math.random() * indexArr.length);
 			
+			//Remember the history variable we declared earlier? history should currently be holding
+			//$("#history"), a reference to the history <div>. We use the append method here to append
+			//some text to the end of this <div> element. Note that we also add HTML tags to the DOM
+			//as well (<br/>). See: https://api.jquery.com/append/
 			history.append(text + "<br/>");
 			
+			//Regular javascript
 			text = text.replace(myDict[rand].original, "");
 			text = text.slice(0, indexArr[randIndex]) + myDict[rand].new + text.slice(indexArr[randIndex]);
 			
+			//Lastly, we use $("#sterbin") to grab the element with ID sterbin. We call the .val() function
+			//one last time, but passing it a value this time. When passing it a value, it sets the value
+			//of the sterbin element to that passed in parameter.
 			$("#sterbin").val(text);
 		});
 		
