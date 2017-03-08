@@ -63,11 +63,6 @@
 			return result;
 		}
 		
-		//We use $("#history") to grab the element with the ID history. We'll be using
-		//this element whenever the button is pressed, so we look it up once and store
-		//it for later.
-	        var history = $("#history");
-		
 		//jQuery magic starts. $("#doIt") grabs the element with the ID doIt. We chain the
 		//.on() function to add a handler, tell the handler to handle the click event, and lastly
 		//we give it a function to run when it detects that our element has been clicked.
@@ -79,6 +74,10 @@
 			//.val() function to grab the value of that element. Since it's a <input type="text">, we get
 			//whatever is currently entered in that text field. See: https://api.jquery.com/val/
 			var text = $("#sterbin").val();
+			
+			//We use $("#history") to grab the element with the ID history. We'll need it later, so
+			//we just save the reference now.
+	       		var history = $("#history");
 			
 			//This is just an easy way to clone an array. See: http://stackoverflow.com/a/23481096
 			var myDict = JSON.parse(JSON.stringify(replacementDict));
