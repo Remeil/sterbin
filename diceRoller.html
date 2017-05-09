@@ -41,51 +41,54 @@
             var advantage = $("#advantage").is(':checked');
             var disadvantage = $("#disadvantage").is(':checked');
 
-            if ((advantage || disadvantage) && diceAmount != 1) {
-                alert ("must only have 1 die in advantage or disadvantage");
-            }
-            else {
-                for (var i = 0; i < rollAmount; i++) {
-                    var outputString = "<p>";
+			for (var i = 0; i < rollAmount; i++) {
+				var outputString = "<p>";
 
-                    if (advantage && !disadvantage) {
-                        var sum = 0;
+				if (advantage && !disadvantage) {
+					var sum = 0;
 
-                        var first = roll(diceSize);
-                        var second = roll(diceSize);
+					for (var j = 0; j < diceAmount; j++) {
+						var first = roll(diceSize);
+						var second = roll(diceSize);
 
-                        sum = Math.max(first, second) + modifier;
+						sum += Math.max(first, second) + modifier;
+						outputString += "[" + first + ", " + second + "] + ";
+					}
 
-                        outputString += "[" + first + ", " + second + "] + " + modifier + " = " + sum;
-                    }
-                    else if (disadvantage && !advantage) {
-                        var sum = 0;
+					sum += modifier;
+					outputString += modifier + " = " + sum;
+				}
+				else if (disadvantage && !advantage) {
+					var sum = 0;
 
-                        var first = roll(diceSize);
-                        var second = roll(diceSize);
+					for (var j = 0; j < diceAmount; j++) {
+						var first = roll(diceSize);
+						var second = roll(diceSize);
 
-                        sum = Math.min(first, second) + modifier;
+						sum += Math.min(first, second) + modifier;
+						outputString += "[" + first + ", " + second + "] + ";
+					}
 
-                        outputString += "[" + first + ", " + second + "] + " + modifier + " = " + sum;
-                    }
-                    else {
-                        var sum = 0;
-                        for (var j = 0; j < diceAmount; j++) {
-                            var output = roll(diceSize);
+					sum += modifier;
+					outputString += modifier + " = " + sum;
+				}
+				else {
+					var sum = 0;
+					for (var j = 0; j < diceAmount; j++) {
+						var output = roll(diceSize);
 
-                            sum += output;
-                            outputString += output + " + ";
-                        }
+						sum += output;
+						outputString += output + " + ";
+					}
 
-                        sum += modifier;
-                        outputString += modifier + " = " + sum;
-                    }
+					sum += modifier;
+					outputString += modifier + " = " + sum;
+				}
 
-                    outputString += "</p>"
+				outputString += "</p>"
 
-                    $("#output").append(outputString);
-                }
-            }
+				$("#output").append(outputString);
+			}
         })
     });
 </script>
