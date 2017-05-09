@@ -51,7 +51,7 @@
 						var first = roll(diceSize);
 						var second = roll(diceSize);
 
-						sum += Math.max(first, second) + modifier;
+						sum += Math.max(first, second);
 						outputString += "[" + first + ", " + second + "] + ";
 					}
 
@@ -65,7 +65,7 @@
 						var first = roll(diceSize);
 						var second = roll(diceSize);
 
-						sum += Math.min(first, second) + modifier;
+						sum += Math.min(first, second);
 						outputString += "[" + first + ", " + second + "] + ";
 					}
 
