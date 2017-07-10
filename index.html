@@ -29,31 +29,40 @@
 			}
 		}
 		
-		addToReplacementDict("v", "ph", 1);
-		addToReplacementDict("ph", "phph", 1);
-		addToReplacementDict("ph", "fe", 1);
-		addToReplacementDict("bin", "erbin", 1);
-		addToReplacementDict("st", "pht", 1);
-		addToReplacementDict("e", "eve", 1);
-		addToReplacementDict("b", "beeb", 1);
-		addToReplacementDict("b", "bl", 1);
-		addToReplacementDict("v", "fph", 1);
-		addToReplacementDict("eb", "erb", 1);
-		addToReplacementDict("ven", "bin", 1);
-		addToReplacementDict("ph", "phb", 1);
-		addToReplacementDict("ph", "bph", 1);
-		addToReplacementDict("sterbin", "sterbenflerben", 25);
-		addToReplacementDict("Sterbin", "Sterbenflerben", 25);
-		addToReplacementDict("er", "fler", 1);
-		addToReplacementDict("bin", "flerben", 1);
-		addToReplacementDict("j", "h", 1);
-		addToReplacementDict("j", "y", 1);
+		addToReplacementDict("v", "ph", 2);
+		addToReplacementDict("ph", "phph", 2);
+		addToReplacementDict("ph", "fe", 2);
+		addToReplacementDict("bin", "erbin", 2);
+		addToReplacementDict("st", "pht", 2);
+		addToReplacementDict("e", "eve", 2);
+		addToReplacementDict("b", "beeb", 2);
+		addToReplacementDict("b", "bl", 2);
+		addToReplacementDict("v", "fph", 2);
+		addToReplacementDict("eb", "erb", 2);
+		addToReplacementDict("ven", "bin", 2);
+		addToReplacementDict("ph", "phb", 2);
+		addToReplacementDict("ph", "bph", 2);
+		addToReplacementDict("sterbin", "sterbenflerben", 50);
+		addToReplacementDict("Sterbin", "Sterbenflerben", 50);
+		addToReplacementDict("er", "fler", 2);
+		addToReplacementDict("bin", "flerben", 2);
+		addToReplacementDict("j", "h", 2);
+		addToReplacementDict("j", "y", 2);
+		addToReplacementDict("o", "obo", 1);
+		addToReplacementDict("bo", "blo", 2);
+		addToReplacementDict("osh", "orshki", 2);
+		addToReplacementDict("o", "ob", 2);
+		addToReplacementDict("sh", "shk", 2);
+		addToReplacementDict("hk", "hkli", 2);
+		addToReplacementDict("bsh", "blorsh", 2);
 		
 		//Reducers
-		addToReplacementDict("ee", "e", 1 * REDUCER_WEIGHT);
-		addToReplacementDict("bb", "b", 1 * REDUCER_WEIGHT);
-		addToReplacementDict("phph", "ph", 1 * REDUCER_WEIGHT);
-		addToReplacementDict("flfl", "fl", 1 * REDUCER_WEIGHT);
+		addToReplacementDict("ee", "e", 2 * REDUCER_WEIGHT);
+		addToReplacementDict("bb", "b", 2 * REDUCER_WEIGHT);
+		addToReplacementDict("kk", "k", 2 * REDUCER_WEIGHT);
+		addToReplacementDict("phph", "ph", 2 * REDUCER_WEIGHT);
+		addToReplacementDict("lili", "li", 2 * REDUCER_WEIGHT);
+		addToReplacementDict("flfl", "fl", 2 * REDUCER_WEIGHT);
 		
 		function indexes(source, find) {
 			var result = [];
