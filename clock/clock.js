@@ -62,7 +62,7 @@ function simulateGame() {
 function runTrials(trials) {
 	var cardsFlipped = 0;
 	var gamesWon = 0;
-	var minCardsFlipped = 52;
+	var minCardsFlipped = 53;
 	var maxCardsFlipped = 0;
 	
 	var minimumGame = "";
