@@ -23,7 +23,6 @@ function generatePairs() {
     }
 
     for (let i = 0; i < givers.length; i++) {
-        console.log(givers[i] + " buys for " + recievers[i]);
         $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
     }
 }
