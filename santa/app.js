@@ -2,15 +2,23 @@ let givers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'J
 let recievers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'Jennifer', 'John', 'Jason'];
 
 let bannedCombinations = [
-    // significant others
-    ['Josh', 'Savannah'],
-    ['Joe', 'Abby'],
+    //married
     ['David', 'Jackie'],
     ['Steven', 'Jennifer'],
-    
-    // family
+    ['Josh', 'Savannah'],
+    ['Joe', 'Abby'],
+
+    //biological
+    ['David', 'Steven'],
     ['Josh', 'Abby'],
-    ['David', 'Steven']
+
+    //legal
+    ['Josh', 'Joe'],
+    ['David', 'Jennifer'],
+    ['Jackie', 'Jennifer'],
+    ['Jackie', 'Steven'],
+    ['Joe', 'Savannah'],
+    ['Joe', 'Josh'],
 ];
 
 function generatePairs() {
