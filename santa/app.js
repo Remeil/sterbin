@@ -13,12 +13,12 @@ let bannedCombinations = [
     ['Josh', 'Abby'],
 
     //legal
-    ['Josh', 'Joe'],
     ['David', 'Jennifer'],
     ['Jackie', 'Jennifer'],
     ['Jackie', 'Steven'],
+    ['Josh', 'Joe'],
     ['Joe', 'Savannah'],
-    ['Joe', 'Josh'],
+    ['Savannah', 'Abby']
 ];
 
 function generatePairs() {
