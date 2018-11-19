@@ -1,5 +1,5 @@
-let givers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'Jennifer', 'John', 'Jason'];
-let recievers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'Jennifer', 'John', 'Jason'];
+let givers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'Jennifer', 'Jason'];
+let recievers = ['Josh', 'Savannah', 'Joe', 'Abby', 'David', 'Jackie', 'Steven', 'Jennifer', 'Jason'];
 
 let bannedCombinations = [
     //married
@@ -21,20 +21,44 @@ let bannedCombinations = [
     ['Savannah', 'Abby']
 ];
 
+var m_w = 123456789;
+var m_z = 987654321;
+var mask = 0xffffffff;
+
+// Takes any integer
+function seed(i) {
+    m_w = i;
+    m_z = 987654321;
+}
+
+// Returns number between 0 (inclusive) and 1.0 (exclusive),
+// just like Math.random().
+var realRandom = Math.random;
+Math.random = function() {
+    m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+    m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+    var result = ((m_z << 16) + m_w) & mask;
+    result /= 4294967296;
+    return result + 0.5;
+}
+
+seed(8675309);
+
 function generatePairs() {
     let valid = false;
-    let counts = 0;
 
     while (!valid) {
         givers = _.shuffle(givers);
         recievers = _.shuffle(recievers);
         valid = validatePairs(givers, recievers);
-        counts++;
     }
 
-    console.log("Tries to get good draw: " + counts);
+    var input = $("#in")[0].value;
     for (let i = 0; i < givers.length; i++) {
-        $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
+        if (givers[i] == input) {
+			$("#submit").attr("disabled", true);
+            $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
+        }
     }
 }
 
@@ -57,5 +81,17 @@ function validatePairs(givers, recievers) {
 }
 
 $(document).ready(function() {
-    generatePairs();
+	function getRandom(min, max) {
+		return realRandom() * (max - min) + min;
+	}
+
+	(function letItSnow(){
+	var snowflakes = document.querySelectorAll('.snow');
+		for (var i = 0; i < snowflakes.length; i++) {
+			var snowflake = snowflakes[i];
+			snowflake.setAttribute('cx', getRandom(1,100) + '%');
+			snowflake.setAttribute('cy', '-' + getRandom(1,400));
+			snowflake.setAttribute('r', getRandom(1,3));
+		}
+	})();
 });
