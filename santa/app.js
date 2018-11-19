@@ -46,6 +46,7 @@ seed(8675309);
 
 function generatePairs() {
     let valid = false;
+    let found = false;
 
     while (!valid) {
         givers = _.shuffle(givers);
@@ -56,9 +57,14 @@ function generatePairs() {
     var input = $("#in")[0].value;
     for (let i = 0; i < givers.length; i++) {
         if (givers[i] == input) {
-			$("#submit").attr("disabled", true);
+            $("#submit").attr("disabled", true);
             $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
+            found = true;
         }
+    }
+
+    if (!found) {
+	$("#log").append("Name '" + input + "' was not found.");
     }
 }
 
