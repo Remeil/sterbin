@@ -23,13 +23,16 @@ let bannedCombinations = [
 
 function generatePairs() {
     let valid = false;
+    let counts = 0;
 
     while (!valid) {
         givers = _.shuffle(givers);
         recievers = _.shuffle(recievers);
         valid = validatePairs(givers, recievers);
+        counts++;
     }
 
+    console.log("Tries to get good draw: " + counts);
     for (let i = 0; i < givers.length; i++) {
         $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
     }
