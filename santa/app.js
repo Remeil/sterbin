@@ -64,7 +64,7 @@ function generatePairs() {
     }
 
     if (!found) {
-	$("#log").append("Name '" + input + "' was not found.");
+	$("#log").append("Name '" + input + "' was not found. <br/>");
     }
 }
 
