@@ -42,8 +42,9 @@ Math.random = function() {
     return result + 0.5;
 }
 
+seed(8675309);
+
 function generatePairs() {
-    seed(42069);
     let valid = false;
     let found = false;
 
@@ -58,13 +59,15 @@ function generatePairs() {
         if (givers[i] == input) {
             $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
             found = true;
-            $("#submit").attr("disabled", true);
         }
     }
+	
+    $("#submit").attr("disabled", true);
 
     if (!found) {
 	$("#log").append("Name '" + input + "' was not found. <br/>" +
-			 "You need to refresh the page to try again, sorry.");
+			 "You need to refresh the page to try again, sorry. <br/>" +
+			 "(If we didn't force this, you'd get a different person)");
     }
 }
 
