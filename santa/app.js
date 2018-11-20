@@ -58,9 +58,9 @@ function generatePairs() {
         if (givers[i] == input) {
             $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
             found = true;
+            $("#submit").attr("disabled", true);
         }
     }
-    $("#submit").attr("disabled", true);
 
     if (!found) {
 	$("#log").append("Name '" + input + "' was not found. <br/>" +
