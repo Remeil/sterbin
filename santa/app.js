@@ -42,9 +42,8 @@ Math.random = function() {
     return result + 0.5;
 }
 
-seed(8675309);
-
 function generatePairs() {
+    seed(42069);
     let valid = false;
     let found = false;
 
