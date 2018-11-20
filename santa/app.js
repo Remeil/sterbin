@@ -57,14 +57,15 @@ function generatePairs() {
     var input = $("#in")[0].value;
     for (let i = 0; i < givers.length; i++) {
         if (givers[i] == input) {
-            $("#submit").attr("disabled", true);
             $("#log").append(givers[i] + " buys for " + recievers[i] + "<br/>")
             found = true;
         }
     }
+    $("#submit").attr("disabled", true);
 
     if (!found) {
-	$("#log").append("Name '" + input + "' was not found. <br/>");
+	$("#log").append("Name '" + input + "' was not found. <br/>" +
+			 "You need to refresh the page to try again, sorry.");
     }
 }
 
