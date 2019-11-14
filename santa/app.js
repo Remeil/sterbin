@@ -13,12 +13,12 @@ let bannedCombinations = [
     ['Josh', 'Abby'],
 
     //legal
-    ['David', 'Jennifer'],
-    ['Jackie', 'Jennifer'],
-    ['Jackie', 'Steven'],
-    ['Josh', 'Joe'],
-    ['Joe', 'Savannah'],
-    ['Savannah', 'Abby']
+    // ['David', 'Jennifer'],
+    // ['Jackie', 'Jennifer'],
+    // ['Jackie', 'Steven'],
+    // ['Josh', 'Joe'],
+    // ['Joe', 'Savannah'],
+    // ['Savannah', 'Abby']
 ];
 
 var m_w = 123456789;
