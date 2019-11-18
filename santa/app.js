@@ -25,6 +25,8 @@ var m_w = 123456789;
 var m_z = 987654321;
 var mask = 0xffffffff;
 
+var seed = 7696321;
+
 // Takes any integer
 function seed(i) {
     m_w = i;
@@ -44,7 +46,7 @@ let seededRandom = function () {
 
 
 function generatePairs() {
-    seed(42069);
+    seed(seed);
     let valid = false;
     let found = false;
 
@@ -101,6 +103,8 @@ $(document).ready(function () {
             snowflake.setAttribute('r', getRandom(1, 3));
         }
     })();
+	
+	$("#seed").text(`Seed: ${seed}`);
 });
 
 function shuffle(array) {
