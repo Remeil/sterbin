@@ -88,6 +88,14 @@ body {
   }
 }
 
+#date {
+	padding-bottom: 6px;
+}
+
+#seed {
+	padding-bottom: 6px;
+}
+
 		</style>
     </head>
     <body>
@@ -155,7 +163,9 @@ body {
 		</svg>
         <div>
 			<div>
-        		<input id="in" placeholder="Name"><button id="submit" onclick="generatePairs()">Santa</button>
+				<div id="date">Secret Santa 2019</div>
+				<div id="seed"></div>
+        		<input id="in" placeholder="Enter Your Name"><button id="submit" onclick="generatePairs()">Santa</button>
         		<div id="log"><br></div>
 			</div>
 		</div>
