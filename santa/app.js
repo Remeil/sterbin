@@ -25,7 +25,7 @@ var m_w = 123456789;
 var m_z = 987654321;
 var mask = 0xffffffff;
 
-var seed = 7696321;
+var theSeed = 3171233;
 
 // Takes any integer
 function seed(i) {
@@ -46,7 +46,7 @@ let seededRandom = function () {
 
 
 function generatePairs() {
-    seed(seed);
+    seed(theSeed);
     let valid = false;
     let found = false;
 
@@ -104,7 +104,7 @@ $(document).ready(function () {
         }
     })();
 	
-	$("#seed").text(`Seed: ${seed}`);
+	$("#seed").text(`Seed: ${theSeed}`);
 });
 
 function shuffle(array) {
