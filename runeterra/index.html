@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Flarum Runeterra Helper</title>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <textarea id="post" style="width: 500px; height: 200px;">Captain [Teemo] on duty!</textarea>
+    <br/> <br/>
+    <button type="button" id="doIt">Format</button> 
+    <br/> <br/>
+	<textarea id="result" style="width: 500px; min-height: 200px;" disabled="disabled"></textarea>
+	
+	<script>
+		$("#doIt").on("click", function() {
+			var text = $("#post").val();
+	       	var history = $("#result");
+
+            var assembledString = "";
+
+            let index = text.indexOf("[")
+            while(index >= 0) {
+                assembledString += text.substring(0, index);
+                let closingIndex = text.indexOf("]");
+                let cardName = text.substring(index + 1, closingIndex);
+                let normalizedCardName = cardName.toLowerCase().replace(" ", "-");
+                let url = `https://www.runeterrafire.com/cards/${normalizedCardName}`;
+                assembledString += `[${cardName}](${url})`;
+
+                text = text.substring(closingIndex + 1);
+                index = text.indexOf("[")
+            }
+
+            assembledString += text;
+
+			history.text(assembledString);
+		});
+		
+	</script>
+</body>
+</html>
