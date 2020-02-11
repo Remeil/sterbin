@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Stack Simulation</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <span>Stack size: </span>
+    <input id="stack-size" value="8" />
+    <br />
+    <span>Number of stacks: </span>
+    <input id="stack-count" value="6" />
+    <br />
+    <span>Number of target cards in each stack: </span>
+    <input id="target-count" value="1" />
+    <br />
+    <span>Number of cards drawn: </span>
+    <input id="cards-drawn" value="3" />
+    <br />
+    <span>Number of bonus cards drawn when target drawn: </span>
+    <input id="bonus-draws" value="1" />
+    <br />
+    <span>Simulations to Run: </span>
+    <input id="simulation-count" value="500" />
+    <br />
+    <button type="button" id="doIt">Simulate</button>
+    <br /> <br />
+    <div id="result-1"></div>
+    <div id="result-2"></div>
+    <div id="result-3"></div>
+    <div id="result-4"></div>
+    <div id="result-5"></div>
+    <div id="result-6"></div>
+
+    <script>
+        $("#doIt").on("click", function () {
+            var stackSize = $("#stack-size").val();
+            var stackCount = $("#stack-count").val();
+            var targetCount = $("#target-count").val();
+            var cardsDrawn = $("#cards-drawn").val();
+            var bonusDraws = $("#bonus-draws").val();
+            var simulationCount = $("#simulation-count").val();
+
+            var doubleDraws = 0;
+            var uniqueGamesDoubleDraws = 0;
+            var gamesWithNoDoubleDraw = 0;
+
+            for (var simulationIndex = 0; simulationIndex < simulationCount; simulationIndex++) {
+                var stackArrays = [];
+                var doubleDrawHappenedThisGame = false;
+
+                for (var i = 0; i < stackCount; i++) {
+                    var targetCards = [];
+                    for (var j = 0; j < targetCount; j++) {
+                        var insertedCard = false;
+                        while (!insertedCard) {
+                            var insertAt = randBetween(1, stackSize);
+                            if (targetCards.indexOf(insertAt) === -1) {
+                                insertedCard = true;
+                                targetCards.push(insertAt);
+                            }
+                        }
+                    }
+
+                    var thisStack = [];
+                    for (var j = 1; j <= stackSize; j++) {
+                        thisStack.push(targetCards.indexOf(j) !== -1);
+                    }
+                    stackArrays.push(thisStack);
+                }
+
+                var deck = stackArrays.flat();
+
+                while (deck.length >= cardsDrawn) {
+                    var hits = 0;
+                    for (var i = 0; i < cardsDrawn; i++) {
+                        if (deck.shift()) {
+                            hits++;
+                            i -= bonusDraws;
+                        }
+                    }
+
+                    if (hits > 1) {
+                        doubleDraws++;
+
+                        if (!doubleDrawHappenedThisGame) {
+                            doubleDrawHappenedThisGame = true;
+                            uniqueGamesDoubleDraws++;
+                        }
+                    }
+                }
+
+                if (!doubleDrawHappenedThisGame) {
+                    gamesWithNoDoubleDraw++;
+                }
+            }
+
+            $("#result-1").text(`Games simulated: ${simulationCount}`);
+            $("#result-2").text(`Games with a double draw: ${uniqueGamesDoubleDraws}`);
+            $("#result-3").text(`Games without a double draw: ${gamesWithNoDoubleDraw}`);
+            $("#result-4").text(`Double draws that occured: ${doubleDraws}`);
+            $("#result-5").text(`Rate of games with double draws: ${(uniqueGamesDoubleDraws/simulationCount)*100}%`);
+            $("#result-6").text(`Expected occurances of double draws in average game: ${doubleDraws/simulationCount}`);
+        });
+
+        function randBetween(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+
+    </script>
+</body>
+
+</html>
