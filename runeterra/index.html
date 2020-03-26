@@ -24,7 +24,11 @@
                 assembledString += text.substring(0, index);
                 let closingIndex = text.indexOf("]");
                 let cardName = text.substring(index + 1, closingIndex);
-                let normalizedCardName = cardName.toLowerCase().split(" ").join("-").split("!").join("").split("'").join("");
+                let normalizedCardName = cardName.toLowerCase()
+			.split(" ").join("-")
+			.split("!").join("")
+			.split("'").join("")
+			.split(",").join("");
                 let url = `https://www.runeterrafire.com/cards/${normalizedCardName}`;
                 assembledString += `[${cardName}](${url})`;
 
