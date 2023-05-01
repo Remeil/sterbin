@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Dota 2 Timers</title>
+    <link rel="stylesheet" href="site.css"></head>
+<body>
+    <div class="options">
+        <div class="warnings">
+            <h2>Warnings</h2>
+            <h3>Text to Speech</h3>
+            <div class="singleOption">
+                <input type="checkbox" id="enableSpeech" checked="checked"> 
+                <label for="enableSpeech">Enable text to speech for warnings</label>
+            </div>
+            <div class="singleOption">
+                <select id="speechSynthesizer"><option value="Microsoft David - English (United States)" selected="selected">Microsoft David - English (United States)</option><option value="Microsoft Mark - English (United States)">Microsoft Mark - English (United States)</option><option value="Microsoft Zira - English (United States)">Microsoft Zira - English (United States)</option><option value="Microsoft David Desktop - English (United States)">Microsoft David Desktop - English (United States)</option><option value="Microsoft Zira Desktop - English (United States)">Microsoft Zira Desktop - English (United States)</option></select> 
+                <label for="speechSynthesizer">Text to Speech Syntheziser</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="ttsVolume" value="0.5" step="0.01" min="0" max="1"> 
+                <label for="ttsVolume">Text to Speech volume</label>
+            </div>
+            <div class="singleOption">
+                <button id="testTTS">Test TTS</button>
+            </div>
+            <h3>Static Timers</h3>
+            <div class="singleOption">
+                <select id="speechLength">
+                    <option value="terse">Terse</option>
+                    <option value="descriptive" selected="selected">Descriptive</option>
+                </select> 
+                <label for="speechLength">Notification style</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="preWarningTime" value="15" step="1" min="0"> 
+                <label for="preWarningTime">Seconds before event to warn</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableRoshanMoving" checked="checked"> 
+                <label for="enableRoshanMoving">Enable Roshan moving warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableLotusPool" checked="checked"> 
+                <label for="enableLotusPool">Enable lotus pool warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="lotusPoolLimit" value="5" step="1" min="0"> 
+                <label for="lotusPoolLimit">Max number of lotus warnings</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableWisdomRunes" checked="checked"> 
+                <label for="enableWisdomRunes">Enable wisdom rune warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableBountyRunes" checked="checked"> 
+                <label for="enableBountyRunes">Enable bounty rune warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enablePowerRunes" checked="checked">
+                <label for="enablePowerRunes">Enable power rune warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableTormentor" checked="checked"> 
+                <label for="enableTormentor">Enable tormentor first spawn warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableNeutrals" checked="checked"> 
+                <label for="enableNeutrals">Enable neuties availabilty warning</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableStackTiming" checked="checked"> 
+                <label for="enableStackTiming">Enable stack timing warning (ignores prewarning time)</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="stackWarning" value="45" step="1" min="0"> 
+                <label for="stackWarning">Max number of stack warnings</label>
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enablePullTiming" checked="checked"> 
+                <label for="enablePullTiming">Enable pull timer warning (ignores prewarning time)</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="pullWarningLimit" value="15" step="1" min="0"> 
+                <label for="pullWarningLimit">Max number of pull warnings</label>
+            </div>
+            <h3>Requires Live Game Data (Unimplemented)</h3>
+            <div class="singleOption">
+                <input type="checkbox" id="enableTormentorRespawn" disabled="disabled"> Enable tormentor respawn warning
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableRoshanMinimumSpawn" disabled="disabled"> Enable Roshan minimum respawn warning
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableRoshanMaximumSpawn" disabled="disabled" checked="checked"> Enable Roshan maximum respawn warning
+            </div>
+            <div class="singleOption">
+                <input type="checkbox" id="enableAegisExpiring" disabled="disabled"> Enable Aegis expiring warning
+            </div>
+        <div class="settings">
+            <h2>Settings</h2>
+            <div class="singleOption">
+                <input type="checkbox" id="enableRoshanLocation" checked="checked" disabled="disabled"> 
+                <label for="enableRoshanLocation">Enable Roshan location icon (unimplemented)</label>
+            </div>
+            <div class="singleOption">
+                <input type="number" id="timerStartTime" min="-90" max="0" step="-1" value="-65">
+                <label for="timerStartTime">Timer Start Time (seconds)</label>
+            </div>
+        </div>
+        <hr>
+        <button id="go">Go</button>
+        <button id="stop">Stop</button>
+        <hr>
+    </div>
+
+    <div id="timer">00:00</div>
+    <hr>
+    <div id="output"></div>
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.4.slim.min.js" 
+    integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" 
+    crossorigin="anonymous"></script>
+<script src="site.js"></script>
+</html>
