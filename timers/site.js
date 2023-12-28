@@ -36,7 +36,7 @@
             "stack": "Stack",
             "pull": "Pull",
             "tormentorRespawn": "Tormentor respawning",
-            "roshanMinimum": "Roshan is elgible to respawn",
+            "roshanMinimum": "Roshan is eligible to respawn",
             "roshanMaximum": "Roshan has certainly respawned",
             "aegisExpiring": "Aegis is expiring",
         }
@@ -49,6 +49,13 @@
         time: 0,
         voiceLine: "example"
     }];
+
+    let timeEventList = [];
+
+    let isPaused = false;
+    let lastProcessTime = 0;
+
+    let roshanLocation = "se";
 
     let savedSettings = {
         enableSpeech: false,
@@ -73,6 +80,9 @@
         $("#stop").on("click", stopClicked);
         $("#enableSpeech").on("change", ttsEnableClicked);
         $("#testTTS").on("click", testTTS);
+        $("#roshanDied").on("click", roshanDied);
+        $("#tormentorDied").on("click", tormentorDied);
+        $("#pause").on("click", pause);
 
         if (window.speechSynthesis) {
             populateVoiceList();
@@ -125,7 +135,7 @@
 
         savedSettings = pullSettings();
         saveSettingsToLocalStorage(savedSettings);
-        var timeEventList = createTimeList(savedSettings);
+        timeEventList = createTimeList(savedSettings);
         loopId = window.setInterval(timerLoop, 500, timeEventList);
     }
 
@@ -249,6 +259,16 @@
         return timingList;
     }
 
+    function roshanDied() {
+        addToLiveTimingList("roshanMinimum", 7 * 60 * 1000);
+        addToLiveTimingList("roshanMaximum", 10 * 60 * 1000);
+        addToLiveTimingList("aegisExpiring", 5 * 60 * 1000);
+    }
+
+    function tormentorDied() {
+        addToLiveTimingList("tormentorRespawn", 10 * 60 * 1000);
+    }
+
     /**
      * 
      * @param {string} key SpeechLine key for the event
@@ -269,13 +289,49 @@
         }
     }
 
+    /**
+     * Adds to live timing list and sorts it. Use when adding things after initial startup.
+     * @param {string} key SpeechLine key for the event
+     * @param {number} timeFromNow Milliseconds from now to add the event.
+     */
+    function addToLiveTimingList(key, timeFromNow) {
+        var currentTime = Date.now() - gameStart;
+        timeEventList.push({
+            time: currentTime + timeFromNow,
+            voiceLine: key
+        });
+
+        timeEventList.sort((item1, item2) => item1.time - item2.time);
+    }
+
     function stopClicked() {
         window.clearInterval(loopId);
         loopId = -1;
     }
 
+    function pause() {
+        if (isPaused) {
+            isPaused = false;
+            $("#pause").text("Pause");
+        } else {
+            isPaused = true;
+            $("#pause").text("Unpause");
+        }
+    }
+
     function timerLoop() {
-        var milliseconds = Date.now() - gameStart;
+        let now = Date.now()
+
+        if (isPaused) {
+            let loopDelay = now - lastProcessTime;
+            lastProcessTime = now;
+            gameStart += loopDelay;
+            return;
+        } else {
+            lastProcessTime = now;
+        }
+
+        var milliseconds = now - gameStart;
         var seconds = Math.floor((milliseconds / 1000)) % 60;
         var minutes = Math.floor(Math.floor((milliseconds / 1000)) / 60);
         var timerString = "";
@@ -299,6 +355,12 @@
 
             if (timingList[0].time < milliseconds) {
                 postMessage(timerString, speechLines[savedSettings.speechLength][timingList[0].voiceLine], savedSettings.enableSpeech);
+                
+                console.log(timingList[0].voiceLine);
+                if (timingList[0].voiceLine === "roshanMovingNW" || timingList[0].voiceLine === "roshanMovingSE") {
+                    roshanMove();
+                }
+
                 timingList.splice(0, 1);
             }
             else {
@@ -312,6 +374,16 @@
 
         if (voice) {
             thisIsAnExampleOfSpeex(message);
+        }
+    }
+
+    function roshanMove() {
+        if (roshanLocation === "nw") {
+            roshanLocation = "se";
+            $("#roshanLocationIndicator").text("↘");
+        } else {
+            roshanLocation = "nw";
+            $("#roshanLocationIndicator").text("↖");
         }
     }
 

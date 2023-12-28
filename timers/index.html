@@ -83,19 +83,6 @@
                 <input type="number" id="pullWarningLimit" value="30" step="1" min="0"> 
                 <label for="pullWarningLimit">Max number of pull warnings</label>
             </div>
-            <h3>Requires Live Game Data (Unimplemented)</h3>
-            <div class="singleOption">
-                <input type="checkbox" id="enableTormentorRespawn" disabled="disabled"> Enable tormentor respawn warning
-            </div>
-            <div class="singleOption">
-                <input type="checkbox" id="enableRoshanMinimumSpawn" disabled="disabled"> Enable Roshan minimum respawn warning
-            </div>
-            <div class="singleOption">
-                <input type="checkbox" id="enableRoshanMaximumSpawn" disabled="disabled" checked="checked"> Enable Roshan maximum respawn warning
-            </div>
-            <div class="singleOption">
-                <input type="checkbox" id="enableAegisExpiring" disabled="disabled"> Enable Aegis expiring warning
-            </div>
         <div class="settings">
             <h2>Settings</h2>
             <div class="singleOption">
@@ -110,10 +97,17 @@
         <hr>
         <button id="go">Go</button>
         <button id="stop">Stop</button>
+        <button id="pause">Pause</button>
+        <hr>
+        <button id="roshanDied">Roshan Died</button>
+        <button id="tormentorDied">Tormentor Died</button>
         <hr>
     </div>
 
-    <div id="timer">00:00</div>
+    <div>
+        <span id="timer">00:00</span> 
+        <span id="roshanLocationIndicator">↘</span>
+    </div>
     <hr>
     <div id="output"></div>
     </div>
