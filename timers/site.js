@@ -260,8 +260,8 @@
     }
 
     function roshanDied() {
-        addToLiveTimingList("roshanMinimum", 7 * 60 * 1000);
-        addToLiveTimingList("roshanMaximum", 10 * 60 * 1000);
+        addToLiveTimingList("roshanMinimum", 8 * 60 * 1000);
+        addToLiveTimingList("roshanMaximum", 11 * 60 * 1000);
         addToLiveTimingList("aegisExpiring", 5 * 60 * 1000);
     }
 
