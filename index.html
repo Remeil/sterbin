@@ -1,152 +1,593 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Sterbin</title>
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sterbin</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    :root {
+      --bg-1: #08142e;
+      --bg-2: #103a66;
+      --bg-3: #0f7a6a;
+      --bg-4: #ff7f50;
+      --text: #f6f9ff;
+      --muted: rgba(246, 249, 255, 0.78);
+      --panel: rgba(7, 10, 24, 0.46);
+      --panel-border: rgba(255, 255, 255, 0.24);
+      --button-1: #ffcc3f;
+      --button-2: #ff8a39;
+      --button-text: #171222;
+      --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.4);
+      --shadow-soft: 0 10px 35px rgba(0, 0, 0, 0.3);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    body {
+      background: linear-gradient(130deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4));
+      background-size: 320% 320%;
+      animation: backgroundShift 18s ease-in-out infinite;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(55px);
+      opacity: 0.38;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 20% 25%, rgba(255, 95, 150, 0.72), transparent 36%),
+        radial-gradient(circle at 76% 72%, rgba(80, 220, 255, 0.72), transparent 34%);
+      animation: blobDriftA 20s var(--ease-out) infinite alternate;
+    }
+
+    body::after {
+      background:
+        radial-gradient(circle at 78% 15%, rgba(255, 210, 100, 0.65), transparent 30%),
+        radial-gradient(circle at 18% 80%, rgba(110, 255, 180, 0.6), transparent 34%);
+      animation: blobDriftB 24s var(--ease-out) infinite alternate;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.11;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0.6px, transparent 0.8px);
+      background-size: 3px 3px;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      text-align: center;
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: 0.03em;
+      text-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+    }
+
+    .input-panel {
+      width: min(760px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: clamp(16px, 3.6vw, 28px);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(6px);
+      transition: opacity 280ms var(--ease-out), transform 280ms var(--ease-out);
+    }
+
+    .input-panel.hidden {
+      opacity: 0;
+      transform: translateY(-14px) scale(0.98);
+      pointer-events: none;
+      position: absolute;
+    }
+
+    #sterbin {
+      width: min(620px, 100%);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.17);
+      color: #ffffff;
+      border-radius: var(--radius-md);
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      padding: 16px 20px;
+      outline: none;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+      text-align: center;
+    }
+
+    #sterbin::placeholder {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    #sterbin:focus {
+      border-color: #fff6c4;
+      box-shadow: 0 0 0 4px rgba(255, 236, 173, 0.28);
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    #doIt {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--button-text);
+      background: linear-gradient(180deg, var(--button-1), var(--button-2));
+      padding: 18px 44px;
+      font-size: clamp(1.3rem, 4vw, 2.1rem);
+      box-shadow: 0 12px 0 #c6652a, 0 22px 45px rgba(23, 10, 5, 0.45);
+      transform: translateY(0);
+      transition: transform 140ms var(--ease-out), box-shadow 140ms var(--ease-out), filter 140ms var(--ease-out);
+      will-change: transform;
+      user-select: none;
+    }
+
+    #doIt:hover {
+      filter: brightness(1.05) saturate(1.08);
+      transform: translateY(-2px);
+    }
+
+    #doIt:active,
+    #doIt.pressing {
+      transform: translateY(7px) scale(0.99);
+      box-shadow: 0 5px 0 #c6652a, 0 10px 24px rgba(23, 10, 5, 0.36);
+    }
+
+    .result-wrap {
+      min-height: clamp(95px, 18vh, 220px);
+      display: grid;
+      place-items: center;
+      width: min(1800px, 96vw);
+    }
+
+    #result {
+      margin: 0;
+      font-size: clamp(2.4rem, 10vw, 8rem);
+      font-weight: 900;
+      line-height: 0.96;
+      letter-spacing: 0.012em;
+      text-wrap: balance;
+      text-shadow:
+        0 8px 26px rgba(0, 0, 0, 0.32),
+        0 0 18px rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 280ms var(--ease-out), transform 280ms var(--ease-out);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      max-width: min(1800px, 96vw);
+    }
+
+    #result.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #result.pop {
+      animation: bounceIn 500ms var(--ease-out);
+    }
+
+    #result.shake {
+      animation: textShake 280ms ease;
+    }
+
+    .edit-btn {
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      background: rgba(9, 10, 18, 0.33);
+      color: #f8fbff;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease, background 160ms ease;
+    }
+
+    .edit-btn:hover {
+      background: rgba(9, 10, 18, 0.5);
+    }
+
+    .edit-btn.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    @keyframes backgroundShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes blobDriftA {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      100% {
+        transform: translate(5%, -4%) scale(1.12);
+      }
+    }
+
+    @keyframes blobDriftB {
+      0% {
+        transform: translate(0, 0) scale(1.02);
+      }
+      100% {
+        transform: translate(-6%, 4%) scale(1.15);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.85) translateY(12px);
+      }
+      50% {
+        transform: scale(1.08) translateY(-5px);
+      }
+      100% {
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes textShake {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(4px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        gap: 18px;
+      }
+
+      #doIt {
+        width: 100%;
+        max-width: 360px;
+        padding-inline: 20px;
+      }
+
+      .input-panel {
+        padding: 14px;
+      }
+
+      .subtitle {
+        padding-inline: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-	<input type="text" id="sterbin" value="Steven" style="max-width: 400px; width:75%"/>
-	<button type="button" id="doIt">Sterbinify</button> <br/> <br/>
-	<div id="history">
-	</div>
-	
-	<script>
-		//No jQuery magic here
-		
-		function Replacement(replace, replacer) {
-			this.original = replace;
-			this.new = replacer;
-		}
-		
-		var REDUCER_WEIGHT = 3;
-	
-		var replacementDict = [];
-		
-		function addToReplacementDict(replace, replacer, weight) {
-			for (var i = 0; i < weight; i++) {
-				replacementDict.push(new Replacement(replace, replacer));
-			}
-		}
-		
-		addToReplacementDict("v", "ph", 2);
-		addToReplacementDict("ph", "phph", 2);
-		addToReplacementDict("ph", "fe", 2);
-		addToReplacementDict("bin", "erbin", 2);
-		addToReplacementDict("st", "pht", 2);
-		addToReplacementDict("e", "eve", 2);
-		addToReplacementDict("b", "beeb", 2);
-		addToReplacementDict("b", "bl", 2);
-		addToReplacementDict("v", "fph", 2);
-		addToReplacementDict("eb", "erb", 2);
-		addToReplacementDict("ven", "bin", 2);
-		addToReplacementDict("ph", "phb", 2);
-		addToReplacementDict("ph", "bph", 2);
-		addToReplacementDict("sterbin", "sterbenflerben", 50);
-		addToReplacementDict("Sterbin", "Sterbenflerben", 50);
-		addToReplacementDict("er", "fler", 2);
-		addToReplacementDict("bin", "flerben", 2);
-		addToReplacementDict("j", "h", 2);
-		addToReplacementDict("j", "y", 2);
-		addToReplacementDict("o", "obo", 1);
-		addToReplacementDict("bo", "blo", 2);
-		addToReplacementDict("osh", "orshki", 2);
-		addToReplacementDict("o", "ob", 2);
-		addToReplacementDict("sh", "shk", 2);
-		addToReplacementDict("hk", "hkli", 2);
-		addToReplacementDict("bsh", "blorsh", 2);
-		addToReplacementDict("o", "er", 2);
-		addToReplacementDict("piguy", "peegee", 30);
-		addToReplacementDict("piguy", "peegwee", 30);
-		addToReplacementDict("piguy", "piboy13", 30);
-		addToReplacementDict("piguy", "peebwee", 30);
-		addToReplacementDict("piguy", "digiorno", 30);
-		addToReplacementDict("PiGuy", "piguy", 1);
-		addToReplacementDict("Piguy", "piguy", 1);
-		addToReplacementDict("Jason", "Josan", 3);
-		addToReplacementDict("Jason", "Joisan", 3);
-		addToReplacementDict("Josan", "Joisan", 3);
-		addToReplacementDict("son", "soon", 1);
-		addToReplacementDict("oon", "oona", 1);
-		addToReplacementDict("Abby", "Abby, Mistress of Chaos", 1);
-		addToReplacementDict("Abby", "Abby, Catalyst of Awkwardness", 1);
-		
-		//Reducers
-		addToReplacementDict("ee", "e", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("bb", "b", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("kk", "k", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("phph", "ph", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("lili", "li", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("flfl", "fl", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("aa", "a", 2 * REDUCER_WEIGHT);
-		addToReplacementDict("ff", "f", 2 * REDUCER_WEIGHT);
-		
-		function indexes(source, find) {
-			var result = [];
-			for (i = 0; i < source.length; ++i) {
-				if (source.substring(i, i + find.length) == find) {
-					result.push(i);
-				}
-			}
-			return result;
-		}
-		
-		//jQuery magic starts. $("#doIt") grabs the element with the ID doIt. We chain the
-		//.on() function to add a handler, tell the handler to handle the click event, and lastly
-		//we give it a function to run when it detects that our element has been clicked.
-		//See: https://api.jquery.com/on/
-		$("#doIt").on("click", function() {
-			
-			//$("#sterbin") grabs the element with the ID sterbin. We don't need the element itself,
-			//but we do need the current value of that element to transform it, so we chain the 
-			//.val() function to grab the value of that element. Since it's a <input type="text">, we get
-			//whatever is currently entered in that text field. See: https://api.jquery.com/val/
-			var text = $("#sterbin").val();
-			
-			//We use $("#history") to grab the element with the ID history. We'll need it later, so
-			//we just save the reference now.
-	       		var history = $("#history");
-			
-			//This is just an easy way to clone an array. See: http://stackoverflow.com/a/23481096
-			var myDict = JSON.parse(JSON.stringify(replacementDict));
-			
-			//These two sections are standard JavaScript.
-			var index = -1;
-			
-			while(index < 0) {
-				if (myDict.length === 0) {
-					alert("couldn't find replacement");
-					throw "Whoops";
-				}
-			
-				var rand = Math.floor(Math.random() * myDict.length);
-				index = text.indexOf(myDict[rand].original);
-				
-				if (index < 0) {
-					myDict.splice(rand, 1);
-				}
-			}
-			
-			//Still standard JavaScript here.
-			var indexArr = indexes(text, myDict[rand].original);
-			var randIndex = Math.floor(Math.random() * indexArr.length);
-			
-			//Remember the history variable we declared earlier? history should currently be holding
-			//$("#history"), a reference to the history <div>. We use the append method here to append
-			//some text to the end of this <div> element. Note that we also add HTML tags to the DOM
-			//as well (<br/>). See: https://api.jquery.com/append/
-			history.append(text + "<br/>");
-			
-			//Regular javascript
-			text = text.replace(myDict[rand].original, "");
-			text = text.slice(0, indexArr[randIndex]) + myDict[rand].new + text.slice(indexArr[randIndex]);
-			
-			//Lastly, we use $("#sterbin") to grab the element with ID sterbin. We call the .val() function
-			//one last time, but passing it a value this time. When passing it a value, it sets the value
-			//of the sterbin element to that passed in parameter.
-			$("#sterbin").val(text);
-		});
-		
-	</script>
+  <div class="grain" aria-hidden="true"></div>
+  <main class="app">
+    <h1 class="title">Sterbin</h1>
+    <p class="subtitle">Enter a name, then sterbinify it forever.</p>
+
+    <section class="input-panel" id="inputPanel">
+      <input type="text" id="sterbin" value="Steven" aria-label="Name to sterbinify" />
+    </section>
+
+    <div class="result-wrap">
+      <h2 id="result" aria-live="polite"></h2>
+    </div>
+
+    <button type="button" id="doIt">Sterbinify</button>
+    <button type="button" id="editBtn" class="edit-btn">Edit name</button>
+  </main>
+
+  <script>
+    function Replacement(replace, replacer) {
+      this.original = replace;
+      this.new = replacer;
+    }
+
+    var REDUCER_WEIGHT = 3;
+    var replacementDict = [];
+
+    function addToReplacementDict(replace, replacer, weight) {
+      for (var i = 0; i < weight; i++) {
+        replacementDict.push(new Replacement(replace, replacer));
+      }
+    }
+
+    addToReplacementDict("v", "ph", 2);
+    addToReplacementDict("ph", "phph", 2);
+    addToReplacementDict("ph", "fe", 2);
+    addToReplacementDict("bin", "erbin", 2);
+    addToReplacementDict("st", "pht", 2);
+    addToReplacementDict("e", "eve", 2);
+    addToReplacementDict("b", "beeb", 2);
+    addToReplacementDict("b", "bl", 2);
+    addToReplacementDict("v", "fph", 2);
+    addToReplacementDict("eb", "erb", 2);
+    addToReplacementDict("ven", "bin", 2);
+    addToReplacementDict("ph", "phb", 2);
+    addToReplacementDict("ph", "bph", 2);
+    addToReplacementDict("sterbin", "sterbenflerben", 50);
+    addToReplacementDict("Sterbin", "Sterbenflerben", 50);
+    addToReplacementDict("er", "fler", 2);
+    addToReplacementDict("bin", "flerben", 2);
+    addToReplacementDict("j", "h", 2);
+    addToReplacementDict("j", "y", 2);
+    addToReplacementDict("o", "obo", 1);
+    addToReplacementDict("bo", "blo", 2);
+    addToReplacementDict("osh", "orshki", 2);
+    addToReplacementDict("o", "ob", 2);
+    addToReplacementDict("sh", "shk", 2);
+    addToReplacementDict("hk", "hkli", 2);
+    addToReplacementDict("bsh", "blorsh", 2);
+    addToReplacementDict("o", "er", 2);
+    addToReplacementDict("piguy", "peegee", 30);
+    addToReplacementDict("piguy", "peegwee", 30);
+    addToReplacementDict("piguy", "piboy13", 30);
+    addToReplacementDict("piguy", "peebwee", 30);
+    addToReplacementDict("piguy", "digiorno", 30);
+    addToReplacementDict("PiGuy", "piguy", 1);
+    addToReplacementDict("Piguy", "piguy", 1);
+    addToReplacementDict("Jason", "Josan", 3);
+    addToReplacementDict("Jason", "Joisan", 3);
+    addToReplacementDict("Josan", "Joisan", 3);
+    addToReplacementDict("son", "soon", 1);
+    addToReplacementDict("oon", "oona", 1);
+    addToReplacementDict("Abby", "Abby, Mistress of Chaos", 1);
+    addToReplacementDict("Abby", "Abby, Catalyst of Awkwardness", 1);
+
+    addToReplacementDict("ee", "e", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("bb", "b", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("kk", "k", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("phph", "ph", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("lili", "li", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("flfl", "fl", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("aa", "a", 2 * REDUCER_WEIGHT);
+    addToReplacementDict("ff", "f", 2 * REDUCER_WEIGHT);
+
+    function findAllIndexes(source, find) {
+      var result = [];
+      for (var i = 0; i < source.length; i++) {
+        if (source.substring(i, i + find.length) === find) {
+          result.push(i);
+        }
+      }
+      return result;
+    }
+
+    function sterbinifyOnce(text) {
+      var working = text || "Sterbin";
+      var myDict = JSON.parse(JSON.stringify(replacementDict));
+      var index = -1;
+      var rand = -1;
+
+      while (index < 0) {
+        if (myDict.length === 0) {
+          return working;
+        }
+
+        rand = Math.floor(Math.random() * myDict.length);
+        index = working.indexOf(myDict[rand].original);
+
+        if (index < 0) {
+          myDict.splice(rand, 1);
+        }
+      }
+
+      var indexArr = findAllIndexes(working, myDict[rand].original);
+      var randIndex = Math.floor(Math.random() * indexArr.length);
+
+      working = working.replace(myDict[rand].original, "");
+      working =
+        working.slice(0, indexArr[randIndex]) +
+        myDict[rand].new +
+        working.slice(indexArr[randIndex]);
+
+      return working;
+    }
+
+    var input = document.getElementById("sterbin");
+    var button = document.getElementById("doIt");
+    var result = document.getElementById("result");
+    var inputPanel = document.getElementById("inputPanel");
+    var editBtn = document.getElementById("editBtn");
+
+    var hasStarted = false;
+    var isAnimating = false;
+    var currentText = (input.value || "").trim() || "Steven";
+
+    function randomChar() {
+      var chars = "abcdefghijklmnopqrstuvwxyz";
+      return chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    function togglePressAnimation() {
+      button.classList.remove("pressing");
+      void button.offsetWidth;
+      button.classList.add("pressing");
+      setTimeout(function() {
+        button.classList.remove("pressing");
+      }, 140);
+    }
+
+    function animateToText(targetText) {
+      var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reducedMotion) {
+        result.textContent = targetText;
+        result.classList.add("visible");
+        result.classList.remove("pop", "shake");
+        void result.offsetWidth;
+        result.classList.add("pop");
+        setTimeout(function() {
+          result.classList.remove("pop");
+        }, 520);
+        return Promise.resolve();
+      }
+
+      isAnimating = true;
+      var start = performance.now();
+      var duration = Math.min(620, Math.max(360, 140 + targetText.length * 10));
+
+      return new Promise(function(resolve) {
+        function frame(now) {
+          var progress = Math.min(1, (now - start) / duration);
+          var revealCount = Math.floor(targetText.length * progress);
+          var buffer = "";
+
+          for (var i = 0; i < targetText.length; i++) {
+            if (i < revealCount) {
+              buffer += targetText.charAt(i);
+            } else if (targetText.charAt(i) === " ") {
+              buffer += " ";
+            } else {
+              buffer += randomChar();
+            }
+          }
+
+          result.textContent = progress < 1 ? buffer : targetText;
+
+          if (progress < 1) {
+            requestAnimationFrame(frame);
+          } else {
+            result.classList.add("visible");
+            result.classList.remove("pop", "shake");
+            void result.offsetWidth;
+            result.classList.add("pop");
+
+            setTimeout(function() {
+              result.classList.remove("pop");
+              result.classList.add("shake");
+            }, 360);
+
+            setTimeout(function() {
+              result.classList.remove("shake");
+              isAnimating = false;
+              resolve();
+            }, 660);
+          }
+        }
+
+        requestAnimationFrame(frame);
+      });
+    }
+
+    function applyFirstRunUI() {
+      inputPanel.classList.add("hidden");
+      result.classList.add("visible");
+      editBtn.classList.add("visible");
+    }
+
+    async function sterbinifyAction() {
+      if (isAnimating) {
+        return;
+      }
+
+      togglePressAnimation();
+
+      if (!hasStarted) {
+        currentText = (input.value || "").trim() || "Sterbin";
+      }
+
+      var nextText = sterbinifyOnce(currentText);
+      currentText = nextText;
+
+      if (!hasStarted) {
+        hasStarted = true;
+        applyFirstRunUI();
+      }
+
+      await animateToText(currentText);
+    }
+
+    button.addEventListener("click", sterbinifyAction);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sterbinifyAction();
+      }
+    });
+
+    editBtn.addEventListener("click", function() {
+      if (isAnimating) {
+        return;
+      }
+
+      hasStarted = false;
+      inputPanel.classList.remove("hidden");
+      editBtn.classList.remove("visible");
+      result.classList.remove("visible", "pop", "shake");
+      result.textContent = "";
+      input.value = currentText;
+      setTimeout(function() {
+        input.focus();
+        input.select();
+      }, 120);
+    });
+  </script>
 </body>
 </html>
